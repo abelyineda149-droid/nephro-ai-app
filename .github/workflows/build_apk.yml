@@ -36,5 +36,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: app-release
-        path: nephro-ai-app/build/app/outputs/flutter-apk/app-release.apk
-
+        path: build/app/outputs/flutter-apk/app-release.apk
