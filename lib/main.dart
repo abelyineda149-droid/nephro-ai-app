@@ -1,65 +1,34 @@
-import 'package:flutter/material.dart';
+name: Build Flutter APK
 
-void main() {
-  runApp(const NephroAIApp());
-}
+on:
+  push:
+    branches: [ "main" ]
 
-class NephroAIApp extends StatelessWidget {
-  const NephroAIApp({Key? key}) : super(key: key);
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'NephroAI',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const NephroHomePage(),
-    );
-  }
-}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-class NephroHomePage extends StatelessWidget {
-  const NephroHomePage({Key? key}) : super(key: key);
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('NephroAI Health Monitor'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Welcome to NephroAI',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Action for scanning or lab logging
-              },
-              icon: const Icon(Icons.camera_alt),
-              label: const Text('Scan Lab Results'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Action for pregnancy tracking or health logs
-              },
-              icon: const Icon(Icons.favorite),
-              label: const Text('Health & Pregnancy Tracking'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: ./nephro-ai-app
+
+      - name: Build APK
+        run: flutter build apk --release
+        working-directory: ./nephro-ai-app
