@@ -1,32 +1,20 @@
-name: Build Flutter APK
+name: pubspec.yaml
+description: A new Flutter project for kidney health monitoring.
+publish_to: 'none'
+version: 1.0.0+1
 
-on:
-  push:
-    branches: [ "main" ]
+environment:
+  sdk: '>=3.0.0 <4.0.0'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+dependencies:
+  flutter:
+    sdk: flutter
+  image_picker: ^1.0.7
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.x'
-          channel: 'stable'
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build APK
-        run: flutter build apk --release
+flutter:
+  uses-material-design: true
