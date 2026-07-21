@@ -27,6 +27,8 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+        working-directory: ./nephro-ai-app
 
       - name: Build APK
         run: flutter build apk --release
+        working-directory: ./nephro-ai-app
